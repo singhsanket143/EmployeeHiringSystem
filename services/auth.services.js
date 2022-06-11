@@ -38,9 +38,27 @@ const checkPassword = (userPass, encryptPass) => {
 
 const createToken = (user) => {
     try {
-        return jwt.sign(user, 'relevel', {
+        return jwt.sign(user, process.env.JWT_SECRET, {
             expiresIn: '2 days'
         })
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+const verifyToken = (token) => {
+    try {
+        const response = jwt.verify(token, process.env.JWT_SECRET);
+        return response;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+const getUserById = async (id) => {
+    try {
+        const user = await User.findByPk(id);
+        return user;
     } catch (err) {
         console.log(err);
     }
@@ -50,5 +68,7 @@ module.exports = {
     signup,
     getUserByEmail,
     checkPassword,
-    createToken
+    createToken,
+    verifyToken,
+    getUserById
 }
