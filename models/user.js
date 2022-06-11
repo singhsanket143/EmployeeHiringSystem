@@ -18,6 +18,12 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'userId',
         otherKey: 'roleId'
       });
+
+      this.belongsToMany(models.Job, {
+        through: models.User_Jobs,
+        foreignKey: 'userId',
+        otherKey: 'jobId'
+      })
     }
   }
   User.init({
