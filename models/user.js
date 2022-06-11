@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        min: 4
+        len: [2,10]
       }
     },
     username: DataTypes.STRING
