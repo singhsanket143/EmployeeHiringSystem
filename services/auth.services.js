@@ -1,9 +1,12 @@
 const {User} = require('../models/index');
+const roleService = require('./role.services');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const signup = async (data) => {
     try {
         const user = await User.create(data);
+        const studentRole = await roleService.getStudentRole();
+        user.addRole(studentRole);
         return user;
     } catch (err) {
         console.log(err);
@@ -64,11 +67,26 @@ const getUserById = async (id) => {
     }
 }
 
+const updateUserRole = async (role, id) => {
+    try {
+        const user = await User.findByPk(id);
+        if (role == 'admin') {
+            await user.addRole(await roleService.getAdminRole());
+        } else if (role == 'company') {
+            await user.addRole(await roleService.getCompanyRole());
+        }
+        return user;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 module.exports = {
     signup,
     getUserByEmail,
     checkPassword,
     createToken,
     verifyToken,
-    getUserById
+    getUserById,
+    updateUserRole
 }

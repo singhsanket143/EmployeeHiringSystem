@@ -58,7 +58,21 @@ const signin = async (req, res) => {
     })
 }
 
+const updateRole = async (req, res) => {
+    const user = await authService.getUserByEmail(req.body.email);
+    const response = await authService.updateUserRole(req.params.role, user.id);
+    if(!response) {
+        return res.status(500).json(serverError);
+    }
+    return res.status(200).json({
+        message: 'successfully updated the',
+        data: response,
+        success: true
+    })
+}
+
 module.exports = {
     signup,
-    signin
+    signin,
+    updateRole
 }
